@@ -1,0 +1,14 @@
+{
+  "description": "rtk hook — token optimization for Claude Code",
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "shell": "bash",
+        "command": "rtk hook claude",
+        "timeout": 5000
+      }]
+    }]
+  }
+}
