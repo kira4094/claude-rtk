@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "kira4094",
+  "name": "rtk",
   "description": "Token optimization plugin for Claude Code",
   "owner": { "name": "kira4094" },
   "plugins": [
