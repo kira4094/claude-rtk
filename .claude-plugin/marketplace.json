@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "claude-rtk",
+  "name": "cc-rtk",
   "description": "Token optimization for Claude Code — intercepts Bash commands, reduces output 60-90%",
   "owner": { "name": "kira4094" },
   "plugins": [
