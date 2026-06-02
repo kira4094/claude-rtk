@@ -5,7 +5,7 @@
   "owner": { "name": "kira4094" },
   "plugins": [
     {
-      "name": "rtk",
+      "name": "cc-rtk",
       "description": "Token optimization — intercepts Bash commands, reduces output 60-90%",
       "source": "./plugin",
       "category": "productivity"

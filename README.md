@@ -18,7 +18,7 @@ Verify: `rtk --version`
 
 ```
 /plugin marketplace add kira4094/cc-rtk
-/plugin install rtk              # or: rtk@cc-rtk
+/plugin install cc-rtk              # or: cc-rtk@cc-rtk
 /reload-plugins
 ```
 
