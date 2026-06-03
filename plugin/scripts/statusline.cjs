@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const os = require("os");
 /**
  * cc-rtk statusline.
  * One-shot script: reads stats file, outputs colored status line.

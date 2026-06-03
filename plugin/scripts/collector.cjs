@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const os = require("os");
 /**
  * cc-rtk stats collector.
  * PostToolUse hook — called after every Bash command.
