@@ -52,7 +52,6 @@ function main() {
       parts.push("~" + ratio + "%");
     }
 
-    if (sid) parts.push("ses");
     process.stdout.write(parts.join(" | "));
   } else {
     process.stdout.write("[" + B + "rtk" + N + "[" + R + "OFF" + N + "]]");
