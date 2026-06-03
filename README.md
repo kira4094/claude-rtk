@@ -1,5 +1,7 @@
 # claude-rtk ⚡
 
+[中文](README.zh.md)
+
 **Token optimization + statusLine for Claude Code.** Saves 60–90% on every Bash output, and now shows live stats in your status bar.
 
 ```
