@@ -1,14 +1,17 @@
 #!/usr/bin/env node
-const os = require("os");
 /**
  * cc-rtk statusline.
- * One-shot script: reads stats file, outputs colored status line.
+ * One-shot script: reads per-session or global stats, outputs colored status line.
  * Chainable via cc-statusline.
  */
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
 
-const STATS_FILE = path.join(os.homedir(), ".rtk", ".cc-rtk-stats.json");
+const RTK_DIR = path.join(os.homedir(), ".rtk");
+const STATS_DIR = path.join(RTK_DIR, "stats");
+const GLOBAL_FILE = path.join(RTK_DIR, ".cc-rtk-stats.json");
+const CUR_SESSION_FILE = path.join(os.homedir(), ".claude-memory", "current-session");
 
 // ANSI colors
 const B = "\x1b[34m";  // blue
@@ -22,10 +25,27 @@ function fmt(n) {
   return String(n);
 }
 
-function main() {
-  try {
-    const s = JSON.parse(fs.readFileSync(STATS_FILE, "utf8"));
+function readStats(p) {
+  try { return JSON.parse(fs.readFileSync(p, "utf8")); } catch { return null; }
+}
 
+function getCurrentSessionId() {
+  try {
+    return fs.readFileSync(CUR_SESSION_FILE, "utf8").trim();
+  } catch { return null; }
+}
+
+function main() {
+  // Prefer per-session stats, fall back to global
+  let s = null;
+  const sid = getCurrentSessionId();
+  if (sid) {
+    const sesFile = path.join(STATS_DIR, sid + ".json");
+    s = readStats(sesFile);
+  }
+  if (!s) s = readStats(GLOBAL_FILE);
+
+  if (s) {
     const parts = [
       "[" + B + "rtk" + N + "[" + G + "ON" + N + "]]",
       "cmd:" + s.cmdCount,
@@ -37,9 +57,9 @@ function main() {
       parts.push("~" + ratio + "%");
     }
 
+    if (sid) parts.push("ses");
     process.stdout.write(parts.join(" | "));
-  } catch {
-    // rtk installed but no stats yet
+  } else {
     process.stdout.write("[" + B + "rtk" + N + "[" + R + "OFF" + N + "]]");
   }
 }
