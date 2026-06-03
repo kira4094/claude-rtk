@@ -10,7 +10,6 @@ const os = require("os");
 
 const RTK_DIR = path.join(os.homedir(), ".rtk");
 const STATS_DIR = path.join(RTK_DIR, "stats");
-const GLOBAL_FILE = path.join(RTK_DIR, ".cc-rtk-stats.json");
 const CUR_SESSION_FILE = path.join(os.homedir(), ".claude-memory", "current-session");
 
 // ANSI colors
@@ -29,21 +28,17 @@ function readStats(p) {
   try { return JSON.parse(fs.readFileSync(p, "utf8")); } catch { return null; }
 }
 
-function getCurrentSessionId() {
-  try {
-    return fs.readFileSync(CUR_SESSION_FILE, "utf8").trim();
-  } catch { return null; }
-}
-
 function main() {
-  // Prefer per-session stats, fall back to global
+  // Only show per-session stats, never fall back to global
   let s = null;
-  const sid = getCurrentSessionId();
-  if (sid) {
-    const sesFile = path.join(STATS_DIR, sid + ".json");
-    s = readStats(sesFile);
-  }
-  if (!s) s = readStats(GLOBAL_FILE);
+  let sid = null;
+  try {
+    sid = fs.readFileSync(CUR_SESSION_FILE, "utf8").trim();
+    if (sid) {
+      const sesFile = path.join(STATS_DIR, sid + ".json");
+      s = readStats(sesFile);
+    }
+  } catch {}
 
   if (s) {
     const parts = [
