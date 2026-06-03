@@ -12,7 +12,8 @@ const STATS_FILE = path.join(os.homedir(), ".rtk", ".cc-rtk-stats.json");
 
 // ANSI colors
 const B = "\x1b[34m";  // blue
-const G = "\x1b[32m";  // green
+const G = "\x1b[32m";  // green (ON)
+const R = "\x1b[31m";  // red (OFF)
 const N = "\x1b[0m";   // reset
 
 function fmt(n) {
@@ -26,7 +27,7 @@ function main() {
     const s = JSON.parse(fs.readFileSync(STATS_FILE, "utf8"));
 
     const parts = [
-      "[" + B + "rtk" + N + "[" + G + "active" + N + "]]",
+      "[" + B + "rtk" + N + "[" + G + "ON" + N + "]]",
       "cmd:" + s.cmdCount,
       "-" + fmt(s.estimatedSaved),
     ];
@@ -39,7 +40,7 @@ function main() {
     process.stdout.write(parts.join(" | "));
   } catch {
     // rtk installed but no stats yet
-    process.stdout.write("[" + B + "rtk" + N + "[" + G + "active" + N + "]]");
+    process.stdout.write("[" + B + "rtk" + N + "[" + R + "OFF" + N + "]]");
   }
 }
 
