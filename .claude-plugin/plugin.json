@@ -1,6 +1,6 @@
 {
   "name": "cc-rtk",
-  "version": "v0.1.1(20260603.1308)",
+  "version": "v0.1.2(20260603.1321)",
   "description": "Token optimization for Claude Code — intercepts Bash commands and reduces output by 60-90% via rtk",
   "author": {
     "name": "kira4094"
