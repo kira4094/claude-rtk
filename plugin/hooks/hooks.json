@@ -1,6 +1,15 @@
 {
   "description": "rtk hook — token optimization for Claude Code",
   "hooks": {
+    "Setup": [{
+      "matcher": "*",
+      "hooks": [{
+        "type": "command",
+        "shell": "bash",
+        "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/register-statusline.cjs\"",
+        "timeout": 5
+      }]
+    }],
     "PreToolUse": [{
       "matcher": "Bash",
       "hooks": [{
