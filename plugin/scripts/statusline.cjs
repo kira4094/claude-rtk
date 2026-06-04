@@ -1,10 +1,16 @@
 #!/usr/bin/env node
 /**
  * cc-rtk statusline.
- * One-shot script: reads real rtk compression stats, outputs colored status line.
+ * One-shot script: reads per-session stats + real compression ratio.
  * Chainable via cc-statusline.
  */
+const fs = require("fs");
+const path = require("path");
+const os = require("os");
 const { execSync } = require("child_process");
+
+const STATS_DIR = path.join(os.homedir(), ".rtk", "stats");
+const CUR_SESSION_FILE = path.join(os.homedir(), ".claude-memory", "current-session");
 
 // ANSI colors
 const B = "\x1b[34m";  // blue
@@ -18,26 +24,38 @@ function fmt(n) {
   return String(n);
 }
 
-function getRtkStats() {
+function readJson(p) {
+  try { return JSON.parse(fs.readFileSync(p, "utf8")); } catch { return null; }
+}
+
+function getRealRatio() {
   try {
     const raw = execSync("rtk gain --format json", {
       encoding: "utf8", timeout: 3000, stdio: ["pipe", "pipe", "ignore"]
     });
-    return JSON.parse(raw).summary;
+    return JSON.parse(raw).summary.avg_savings_pct;
+  } catch { return null; }
+}
+
+function getSessionStats() {
+  try {
+    const sid = fs.readFileSync(CUR_SESSION_FILE, "utf8").trim();
+    if (!sid) return null;
+    return readJson(path.join(STATS_DIR, sid + ".json"));
   } catch { return null; }
 }
 
 function main() {
-  const s = getRtkStats();
+  const ses = getSessionStats();
+  const ratio = getRealRatio();
 
-  if (s) {
+  if (ses) {
     const parts = [
       "[" + B + "rtk" + N + "[" + G + "ON" + N + "]]",
-      "cmd:" + s.total_commands,
-      "-" + fmt(s.total_saved),
-      "~" + Math.round(s.avg_savings_pct) + "%",
+      "cmd:" + ses.cmdCount,
+      "-" + fmt(ses.estimatedSaved),
+      "~" + (ratio !== null ? Math.round(ratio) + "%" : Math.round((1 - ses.totalCompressed / ses.totalOriginal) * 100) + "%"),
     ];
-
     process.stdout.write(parts.join(" | "));
   } else {
     process.stdout.write("[" + B + "rtk" + N + "[" + R + "OFF" + N + "]]");
