@@ -1,16 +1,10 @@
 #!/usr/bin/env node
 /**
  * cc-rtk statusline.
- * One-shot script: reads per-session or global stats, outputs colored status line.
+ * One-shot script: reads real rtk compression stats, outputs colored status line.
  * Chainable via cc-statusline.
  */
-const fs = require("fs");
-const path = require("path");
-const os = require("os");
-
-const RTK_DIR = path.join(os.homedir(), ".rtk");
-const STATS_DIR = path.join(RTK_DIR, "stats");
-const CUR_SESSION_FILE = path.join(os.homedir(), ".claude-memory", "current-session");
+const { execSync } = require("child_process");
 
 // ANSI colors
 const B = "\x1b[34m";  // blue
@@ -24,33 +18,25 @@ function fmt(n) {
   return String(n);
 }
 
-function readStats(p) {
-  try { return JSON.parse(fs.readFileSync(p, "utf8")); } catch { return null; }
+function getRtkStats() {
+  try {
+    const raw = execSync("rtk gain --format json", {
+      encoding: "utf8", timeout: 3000, stdio: ["pipe", "pipe", "ignore"]
+    });
+    return JSON.parse(raw).summary;
+  } catch { return null; }
 }
 
 function main() {
-  // Only show per-session stats, never fall back to global
-  let s = null;
-  let sid = null;
-  try {
-    sid = fs.readFileSync(CUR_SESSION_FILE, "utf8").trim();
-    if (sid) {
-      const sesFile = path.join(STATS_DIR, sid + ".json");
-      s = readStats(sesFile);
-    }
-  } catch {}
+  const s = getRtkStats();
 
   if (s) {
     const parts = [
       "[" + B + "rtk" + N + "[" + G + "ON" + N + "]]",
-      "cmd:" + s.cmdCount,
-      "-" + fmt(s.estimatedSaved),
+      "cmd:" + s.total_commands,
+      "-" + fmt(s.total_saved),
+      "~" + Math.round(s.avg_savings_pct) + "%",
     ];
-
-    if (s.totalOriginal > 0) {
-      const ratio = Math.round((1 - s.totalCompressed / s.totalOriginal) * 100);
-      parts.push("~" + ratio + "%");
-    }
 
     process.stdout.write(parts.join(" | "));
   } else {
