@@ -1,0 +1,35 @@
+{
+  "name": "cc-rtk",
+  "version": "0.3.4",
+  "description": "Token optimization + statusLine for Claude Code — intercepts Bash commands, reduces output 60-90%",
+  "license": "MIT",
+  "author": "kira4094",
+  "homepage": "https://github.com/kira4094/cc-rtk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kira4094/cc-rtk.git"
+  },
+  "bin": {
+    "cc-rtk": "cli.js"
+  },
+  "files": [
+    "cli.js",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "prepublishOnly": "node scripts/update-version.cjs && node -e \"var v=require('./version.json'),p=require('./package.json');p.version=v.version;require('fs').writeFileSync('package.json',JSON.stringify(p,null,2)+'\\n')\"",
+    "postinstall": "node -e \"console.log('[cc-rtk] installed! Run: cc-rtk install')\""
+  },
+  "keywords": [
+    "claude-code",
+    "token",
+    "optimization",
+    "rtk",
+    "statusline"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

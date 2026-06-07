@@ -2,6 +2,8 @@
 
 [English](README.md)
 
+[![GitHub stars](https://img.shields.io/github/stars/kira4094/cc-rtk?style=social)](https://github.com/kira4094/cc-rtk) <sub>⭐ 去 GitHub 点个 Star 吧！</sub>
+
 **Token 优化 + statusLine 统计。** 每条 Bash 命令输出节省 60–90%，还能在状态栏看到实时数据。
 
 ```
@@ -46,20 +48,42 @@ rtk --version
 
 ## 安装
 
+两种方式，选一种：
+
+### 方式一：插件安装（推荐）
+
 ```bash
 /plugin marketplace add kira4094/cc-rtk
-/plugin install cc-rtk              # 或: cc-rtk@cc-rtk
+/plugin install cc-rtk
 /reload-plugins
 ```
 
-搞定。从此每条 Bash 命令都被自动压缩和计数。
+重启 Claude Code，搞定。
+
+### 方式二：npm 安装
+
+```bash
+npm install -g cc-rtk
+cc-rtk install
+```
+
+**重要：装完后必须重启 Claude Code，插件才会生效。**
 
 ## 卸载
 
+### 插件方式卸载
 ```bash
 /plugin uninstall cc-rtk
 /reload-plugins
 ```
+
+### npm 方式卸载
+```bash
+cc-rtk uninstall --purge   # 卸载插件 + 删除数据
+npm uninstall -g cc-rtk
+```
+
+重启 Claude Code。
 
 ## 看效果
 

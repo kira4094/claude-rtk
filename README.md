@@ -2,6 +2,8 @@
 
 [中文](README.zh.md)
 
+[![GitHub stars](https://img.shields.io/github/stars/kira4094/cc-rtk?style=social)](https://github.com/kira4094/cc-rtk) <sub>⭐ Star us on GitHub!</sub>
+
 **Token optimization + statusLine for Claude Code.** Saves 60–90% on every Bash output, and now shows live stats in your status bar.
 
 ```
@@ -46,20 +48,42 @@ rtk --version
 
 ## Install
 
+Two ways:
+
+### Option 1: Plugin install (recommended)
+
 ```bash
 /plugin marketplace add kira4094/cc-rtk
-/plugin install cc-rtk              # or: cc-rtk@cc-rtk
+/plugin install cc-rtk
 /reload-plugins
 ```
 
-That's it. Every Bash command from now on gets compressed and counted.
+Restart Claude Code. That's it.
+
+### Option 2: npm install
+
+```bash
+npm install -g cc-rtk
+cc-rtk install
+```
+
+**Important: Restart Claude Code after installation for the plugin to activate.**
 
 ## Uninstall
 
+### Plugin uninstall
 ```bash
 /plugin uninstall cc-rtk
 /reload-plugins
 ```
+
+### npm uninstall
+```bash
+cc-rtk uninstall --purge   # unregister plugin + delete data
+npm uninstall -g cc-rtk
+```
+
+Restart Claude Code.
 
 ## See it in action
 
